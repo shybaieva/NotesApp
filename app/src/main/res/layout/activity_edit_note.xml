@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="@color/page_color"
+    tools:context=".EditNote"
+    android:background="@color/page_color">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/editToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:foregroundGravity="fill"
+        app:layout_constraintTop_toTopOf="parent"
+        app:popupTheme="@style/AppTheme.PopupOverlay"
+        tools:layout_editor_absoluteX="-191dp">
+
+        <EditText
+            android:id="@+id/editTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"
+            android:textColor="#ffffff"
+            android:textColorHint="#ffffff"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="5dp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <EditText
+        android:id="@+id/editContext"
+        android:layout_width="313dp"
+        android:layout_height="602dp"
+        android:backgroundTint="@android:color/transparent"
+        android:fitsSystemWindows="true"
+        android:foregroundGravity="bottom"
+        android:inputType="textMultiLine|textCapSentences"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editToolbar" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="72dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabCustomSize="@android:dimen/app_icon_size"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="@+id/editContext"
+        app:layout_constraintEnd_toEndOf="@+id/editContext"
+        app:maxImageSize="@android:dimen/app_icon_size"
+        app:rippleColor="#E1BEE7"
+        app:srcCompat="@drawable/ic_save_note" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
