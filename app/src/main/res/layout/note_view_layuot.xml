@@ -68,14 +68,15 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ImageView
-                        android:id="@+id/imageView"
-                        android:layout_width="33dp"
-                        android:layout_height="34dp"
+                        android:id="@+id/menuIcon"
+                        android:layout_width="45dp"
+                        android:layout_height="30dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.708"
+                        app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintStart_toEndOf="@+id/tvTaskDescription"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
                         app:srcCompat="@drawable/task_menu_ico" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

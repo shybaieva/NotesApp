@@ -1,4 +1,4 @@
-package net.shybaieva.notes;
+package net.shybaieva.notes.note;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import net.shybaieva.notes.MainActivity;
+import net.shybaieva.notes.R;
 
 import java.util.HashMap;
 import java.util.Map;

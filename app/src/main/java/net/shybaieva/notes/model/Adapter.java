@@ -10,7 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import net.shybaieva.notes.NoteDetails;
+import net.shybaieva.notes.note.NoteDetails;
 import net.shybaieva.notes.R;
 
 import java.util.List;

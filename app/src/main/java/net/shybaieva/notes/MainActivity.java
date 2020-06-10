@@ -1,32 +1,45 @@
 package net.shybaieva.notes;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import net.shybaieva.notes.auth.Register;
 import net.shybaieva.notes.model.Note;
+import net.shybaieva.notes.note.AddNote;
+import net.shybaieva.notes.note.NoteDetails;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +51,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RecyclerView noteList;
     FirebaseFirestore fStore;
     FirestoreRecyclerAdapter<Note, NoteViewHolder> noteAdapter;
+    FirebaseUser user;
+    FirebaseAuth fAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +80,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         fStore = FirebaseFirestore.getInstance();
+
+        fAuth = FirebaseAuth.getInstance();
+        user = fAuth.getCurrentUser();
+
         Query query = fStore.collection("notes").orderBy("title", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<Note>  allNotes = new FirestoreRecyclerOptions.Builder<Note>()
                 .setQuery(query, Note.class).build();
@@ -88,6 +107,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         v.getContext().startActivity(i);
                     }
                 });
+
+                ImageView menuIcon = noteViewHolder.view.findViewById(R.id.menuIcon);
+                menuIcon.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        PopupMenu menu  = new PopupMenu(v.getContext(), v);
+                        menu.getMenu().add("Edit").setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Toast.makeText(MainActivity.this, "Edit clicked", Toast.LENGTH_SHORT).show();
+                                return false;
+                            }
+                        });
+                    }
+                });
             }
 
             @NonNull
@@ -106,17 +140,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.setDrawerIndicatorEnabled(true);
         toggle.syncState();
 
-        //RecyclerView adapter
 
+        //Отображение Recycler View в 2 колонки
         noteList.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         noteList.setAdapter(noteAdapter);
     }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        drawerLayout.closeDrawer(GravityCompat.START);
         switch(item.getItemId()){
             case(R.id.add):{
                 startActivity(new Intent(this, AddNote.class));
+                break;
+            }
+
+            case(R.id.logout):{
+              //  FirebaseAuth.getInstance().signOut();
+
+                checkUser();
+
                 break;
             }
 
@@ -125,6 +168,52 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         return false;
+    }
+
+    private void checkUser(){
+        //Real user or not
+
+        if(user.isAnonymous()){
+            displayAlert();
+        }
+        else{
+            FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(getApplicationContext(), Splash.class));
+            finish();
+        }
+
+    }
+
+    private void displayAlert(){
+        AlertDialog.Builder warning = new AlertDialog.Builder(this)
+                .setTitle("Warning!")
+                .setMessage("If you will logout from the Anonymous account all your data will be deleted\nAre you sure to logout?")
+                .setPositiveButton("Sync Notes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent (getApplicationContext(), Register.class));
+                        finish();
+                    }
+                })
+                .setNegativeButton("Logout", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Delete all notes
+
+
+
+                        //Delete the anonym user
+                        //FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        user.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                startActivity(new Intent(getApplicationContext(), Splash.class));
+                            }
+                        });
+
+                    }
+                });
+            warning.show();
     }
 
     //Настройки в правом верхнем углу
@@ -147,12 +236,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         TextView noteTitle, noteContain;
         View view;
+
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
             noteTitle = itemView.findViewById(R.id.tvTaskName);
             noteContain = itemView.findViewById(R.id.tvTaskDescription);
             view = itemView;
         }
+
+
 
     }
     @Override

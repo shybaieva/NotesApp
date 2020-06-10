@@ -1,6 +1,5 @@
-package net.shybaieva.notes;
+package net.shybaieva.notes.note;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -8,7 +7,6 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.protobuf.Empty;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,12 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.security.Key;
+import net.shybaieva.notes.R;
+
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddNote extends AppCompatActivity {
@@ -55,7 +52,7 @@ public class AddNote extends AppCompatActivity {
 
                 //save note
                if(nTitle.isEmpty() || nContent.isEmpty())
-               {Toast.makeText(AddNote.this, "Message with empty field cannot be saved", Toast.LENGTH_SHORT).show();
+               {Toast.makeText(AddNote.this, "Message with empty field cannot be saved ", Toast.LENGTH_SHORT).show();
                return;}
                else{
 

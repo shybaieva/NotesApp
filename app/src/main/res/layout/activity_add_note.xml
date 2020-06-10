@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="false"
     android:background="@color/page_color"
-    tools:context=".AddNote">
+    tools:context=".note.AddNote">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
